@@ -3,7 +3,7 @@ os.environ["HF_HUB_OFFLINE"] = "1" #must be set to zero if model is not download
 
 from mlx_lm import load, generate
 import mlx.core as mx
-imprt
+
 
 TRUEID = 2434
 FALSEID = 3913
@@ -28,6 +28,6 @@ logit_table = model(prompt)
 truescore = logit_table[0, -1, TRUEID].item()
 falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
 
-confidence_diff = mx.sigmoid(truescore)
+probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
 
-print(truescore, falsescore, confidence_diff)
+print(truescore, falsescore, probability_true)
