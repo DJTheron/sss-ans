@@ -30,7 +30,7 @@ def prob(statement: str):
 
     logit_table = model(prompt)
 
-    truescore = logit_table[0, -1, TRUEID].item()
+    truescore = logit_table[0, -1, TRUEID].item() # 1st thing is 0 cuz ... 2nd thing is -1 cuz that fetches the last token the model sent and trueid fetches the score for the score of the token True
     falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
 
     probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
