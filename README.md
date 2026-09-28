@@ -10,8 +10,7 @@ Model:
 * around 8b Param  
 * Q8 probably  
 * This but quantized [https://huggingface.co/Qwen/Qwen3.5-9B](https://huggingface.co/Qwen/Qwen3.5-9B)  
-* Mac option: [https://huggingface.co/mlx-community/Qwen3.5-9B-MLX-8bit](https://huggingface.co/mlx-community/Qwen3.5-9B-MLX-8bit)  
-* Cuda gpu option: nah it depends idk  
+* Mac option: [https://huggingface.co/mlx-community/Qwen3.5-9B-MLX-8bit](https://huggingface.co/mlx-community/Qwen3.5-9B-MLX-8bit) 
 ## Downloading and loading the model:  
 ### Transformers lib  
 ```python
@@ -104,7 +103,8 @@ print(probability_true.item())
 ```
 
 ## Check out [main.py](main.py) to see the final code
+
 ## License
 Copyright (c) 2026 DJTheron
 
-This project is licensed under the [Mozilla Public License 2.0](LICENSE). You can use it in your own projects, including closed-source or commercial ones, but if you change any of these files you must share those changes under the MPL 2.0. This is so we keep the spirit of open source without stopping progress.
+This project is licensed under the [Mozilla Public License 2.0](LICENSE). You can use it in your own projects, including closed-source or commercial ones, but if you change any of these files you must share those changes under the MPL 2.0. I chose this to keep the spirit of open source without stopping progress.
