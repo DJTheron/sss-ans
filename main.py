@@ -11,9 +11,11 @@ FALSEID = 3913
 #try:
 print(f"[{time.strftime('%H:%M:%S')}] model_loading...")
 start = time.time()
+
 model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit") #type: ignore
+
 print(f"[{time.strftime('%H:%M:%S')}] model_loaded in {time.time() - start} seconds")
-#@The sky is green on a clear day.
+
 #except:
 #    print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
 
