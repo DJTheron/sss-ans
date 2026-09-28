@@ -14,7 +14,7 @@ model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit") #type: ignore
 #except:
 #    print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
 
-prompt = "Statement: The sky is blue on a clear day. Question: Is this True or False? Response format: Response should contain only True or False."
+prompt = "Statement: The sky is green on a clear day. Question: Is this True or False? Response format: Response should contain only True or False."
 
 messages = [{"role": "user", "content": prompt}]
 
@@ -30,4 +30,4 @@ falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this f
 
 probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
 
-print(truescore, falsescore, probability_true)
+print(probability_true.item())
