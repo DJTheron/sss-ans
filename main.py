@@ -18,7 +18,7 @@ prompt = prompt[None]
 
 logit_table = model(prompt)
 
-trueid = logit_table[0][42][2434]
-falseid = logit_table[0][42][3913]
+trueid = logit_table[0][41][2434]
+falseid = logit_table[0][41][3913]
 
 print(trueid, falseid)
