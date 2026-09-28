@@ -1,11 +1,18 @@
+import os
+os.environ["HF_HUB_OFFLINE"] = "1" #must be set to zero if model is not downloaded already!!
+
 from mlx_lm import load, generate
 import mlx.core as mx
-import os
 
-os.environ["HF_HUB_OFFLINE"] = "1"
 
+#try:
 model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit") #type: ignore
 
+#except:
+#    print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
+    
+TRUEID = 2434
+FALSEID = 3913
 
 prompt = "Statement: The sky is blue on a clear day. Question: Is this True or False? Response format: Response should contain only True or False."
 
@@ -18,7 +25,7 @@ prompt = prompt[None]
 
 logit_table = model(prompt)
 
-trueid = logit_table[0][41][2434]
-falseid = logit_table[0][41][3913]
+truescore = logit_table[0, -1, TRUEID]
+falsescore = logit_table[0, -1, FALSEID] # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
 
-print(trueid, falseid)
+print(truescore, falsescore)
