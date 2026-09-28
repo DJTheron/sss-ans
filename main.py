@@ -25,7 +25,7 @@ prompt = prompt[None]
 
 logit_table = model(prompt)
 
-truescore = logit_table[0, -1, TRUEID]
-falsescore = logit_table[0, -1, FALSEID] # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
+truescore = logit_table[0, -1, TRUEID].item()
+falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
 
 print(truescore, falsescore)
