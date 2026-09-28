@@ -13,7 +13,7 @@ Model:
 * Cuda gpu option: nah it depends idk  
 ## Downloading and loading the model:  
 ### Transformers lib  
-```
+```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 model = AutoModelForCausalLM.from_pretrained("qwen/qwen3.5-9b", dtype="auto", device_map="auto") # this in bf16 is 18gb
@@ -21,18 +21,18 @@ tokenizer = AutoTokenizer.from_pretrained("qwen/qwen3.5-9b")
 ```
 ### Mlx lib:  
 Install:  
-```
+```bash
 pip install mlx-lm
 ```
 Run:  
-```
+```python
 from mlx_lm import load
 
 model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit")
 ```
 Model is now loaded.  
 ## Running model to get yes and no tokens:  
-```
+```python
 from mlx_lm import load, generate
 
 model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit")
@@ -66,7 +66,7 @@ I learned to read docs carefully, and that you must look for prompt-template.jin
 | B     | 33                |                |
   
 ## Program to get the model result  
-```
+``` python
 from mlx_lm import load, generate
 
 model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit")
@@ -74,18 +74,9 @@ model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit")
 prompt = "Statement: The sky is blue. Response should contain only Yes or No."
 
 messages = [{"role": "user", "content": prompt}]
-```
-```
 
-prompt = tokenizer.apply_chat_template(
-```
-```
-    messages, add_generation_prompt=True, enable_thinking=False
-)
+prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
 
 prompt = mx.array
 prompt = prompt[None]
-```
-```
-
 ```
