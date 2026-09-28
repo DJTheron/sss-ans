@@ -1,3 +1,4 @@
+
 # SSS Ans
 ## Setup:   
 - [ ] Python3.14 virtual env   
@@ -101,3 +102,9 @@ probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false,
 
 print(probability_true.item())
 ```
+
+## Check out [main.py](main.py) to see the final code
+## License
+Copyright (c) 2026 DJTheron
+
+This project is licensed under the [Mozilla Public License 2.0](LICENSE). You can use it in your own projects, including closed-source or commercial ones, but if you change any of these files you must share those changes under the MPL 2.0. This is so we keep the spirit of open source without stopping progress.
