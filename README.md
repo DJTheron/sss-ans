@@ -3,6 +3,10 @@
 SSS-ANS scores how true or false a statement is by comparing a LLMs true and false logits.
 I haven't built the CUDA/pytorch version yet. Currently MLX on Mac is supported.
 
+## First Run!
+
+When running main.py for the first time make sure to set the env var HF_HUB_OFFLINE to zero in the code, and then after the first run and sucessful download set it back to 1 so it stops checking hugging face for updates and adding extra startup time.
+
 ## Choosing the model:  
 Download correct model with correct quant  
 Model:  
