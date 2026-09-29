@@ -1,7 +1,7 @@
 
 # SSS Ans
-
-I haven't built the CUDA/pytorch version yet. Currently MLX on Mac is supported
+SSS-ANS scores how true or false a statement is by comparing a LLMs true and false logits.
+I haven't built the CUDA/pytorch version yet. Currently MLX on Mac is supported.
 
 ## Choosing the model:  
 Download correct model with correct quant  
