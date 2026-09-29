@@ -61,16 +61,19 @@ def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a
     final_prompts = mx.array(final_prompts)
     logit_table = model(final_prompts)
 
-    for x in range(len(statements)):
-        truescore = logit_table[x, p_lengths[x] - 1, TRUEID].item()
-        falsescore = logit_table[x, p_lengths[x] - 1, FALSEID].item()
-
-        probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
-        probabilities_true.append(probability_true.item())
-
-    return probabilities_true
+    index_row = mx.arange(len(statements))
+    index_pos = mx.array(p_lengths) - 1
+    
+    truescores = logit_table[index_row, index_pos, TRUEID]
+    falsescores = logit_table[index_row, index_pos, FALSEID]
+    
+    probabilities_true = mx.sigmoid(truescores - falsescores).tolist()
+    
+    return probabilities_true # type: ignore
 
 batch_statements = ["The sky is green on a clear day.", "The sky is blue on a clear day.", "Pineapple belongs on pizza."]
+
+prob("warmup")
 
 start = time.perf_counter()
 for statement in batch_statements:
@@ -79,4 +82,4 @@ print("time to beat: ", time.perf_counter() - start)
 
 start = time.perf_counter()
 print(prob_batch(batch_statements))
-print("batch time: ", time.perf_counter() - start)
+print("batch time:", time.perf_counter() - start)
