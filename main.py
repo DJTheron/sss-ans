@@ -30,7 +30,7 @@ def prob(statement: str) -> float: #shows the thing accepts a string and returns
 
     logit_table = model(prompt)
 
-    truescore = logit_table[0, -1, TRUEID].item() # 1st thing is which prompt in the "prompt folder" we are fetching the result from 2nd thing is -1 cuz that fetches the last token the model sent and trueid fetches the score for the score of the token True
+    truescore = logit_table[0, -1, TRUEID].item() # 1st thing is which prompt in the "prompt folder" we are fetching the result from 2nd thing is -1 cuz that fetches the last prediction the model made and trueid fetches the score for the score of the token True
     falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
 
     probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
@@ -38,22 +38,27 @@ def prob(statement: str) -> float: #shows the thing accepts a string and returns
     return probability_true.item()
 
 def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a list of strings and returns a list of floats
-    prompt = f"Statement: {statement} Question: Is this True or False? Response format: Response should contain only True or False."
+    prompts = []
+    probabilities_true = []
+    for statement in statements:
+        prompt = f"Statement: {statement} Question: Is this True or False? Response format: Response should contain only True or False."
 
-    messages = [{"role": "user", "content": prompt}]
-    prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
+        messages = [{"role": "user", "content": prompt}]
+        prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
 
-    prompt = mx.array(prompt) 
-    prompt = prompt[None] # puts it into a "prompt folder" which is what the model expects
+        prompts.append(prompt)# puts it into a "prompt folder" which is what the model expects
 
-    logit_table = model(prompt)
+    prompts = mx.array(prompts)
+    logit_table = model(prompts)
 
-    truescore = logit_table[0, -1, TRUEID].item() # 1st thing is which prompt in the "prompt folder" we are fetching the result from 2nd thing is -1 cuz that fetches the last token the model sent and trueid fetches the score for the score of the token True
-    falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
+    for x in range(len(statements)):
+        truescore = logit_table[x, -1, TRUEID].item()
+        falsescore = logit_table[x, -1, FALSEID].item()
 
-    probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
+        probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
+        probabilities_true.append(probability_true.item())
 
-    return probability_true.item()
+    return probabilities_true
 
 batch_statements = ["The sky is green on a clear day.", "The sky is blue on a clear day.", "Pineapple belongs on pizza."]
 
