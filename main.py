@@ -10,11 +10,11 @@ FALSEID = 3913
 
 #try:
 print(f"[{time.strftime('%H:%M:%S')}] model_loading...")
-start = time.time()
+start = time.perf_counter() # changed to this from time.time() becuase the processors clock can jump and this adjusts for it
 
 model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit") #type: ignore
 
-print(f"[{time.strftime('%H:%M:%S')}] model_loaded in {time.time() - start} seconds")
+print(f"[{time.strftime('%H:%M:%S')}] model_loaded in {time.perf_counter() - start} seconds")
 
 #except:
 #    print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
