@@ -8,6 +8,8 @@ from fastapi import FastAPI, HTTPException
 
 TRUEID = 2434
 FALSEID = 3913
+MAXSTATEMENTS = 32 # change this if u have more than 16gb of ram to make it bigger so it can accept more, same for the next line
+MAXLENGTH = 250 
 
 try:
     print(f"[{time.strftime('%H:%M:%S')}] model_loading...")
@@ -17,7 +19,7 @@ try:
 
     print(f"[{time.strftime('%H:%M:%S')}] model_loaded in {time.perf_counter() - start} seconds")
 
-except FileNotFoundError: # this is the error load() will ommit if it cannot find the file locally (not exact error but this one is a general term that will catch the specific one)
+except FileNotFoundError: # this is the error load() will emit if it cannot find the file locally (not exact error but this one is a general term that will catch the specific one)
     print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
     raise SystemExit(1)
 
@@ -30,8 +32,11 @@ app = FastAPI()
 def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a list of strings and returns a list of floats
     if statements == []: # exits if empty instead of erroring
         return []
-    if len(statements) > 128:
-        raise HTTPException(status_code=413, detail="Request too large, list exceeded 128 statements.") # error 413 means request too large
+    if len(statements) > MAXSTATEMENTS:
+        raise HTTPException(status_code=413, detail=f"Request too large, list exceeded {MAXSTATEMENTS} statements.") # error 413 means request too large
+    for i, statement in statements:
+        if len(statement) > MAXLENGTH:
+            raise HTTPException(status_code=413, detail=f"Request too large, statement {i} too large, exceeded {MAXLENGTH} characters.")
     prompts = []
     final_prompts = []
     p_lengths = []
