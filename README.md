@@ -1,9 +1,8 @@
 
 # SSS Ans
-## Setup:   
-- [ ] Python3.14 virtual env   
-- [ ] PyTorch   
-- [ ] HF transformers library   
+
+I haven't built the CUDA/pytorch version yet. Currently MLX on Mac is supported
+
 ## Choosing the model:  
 Download correct model with correct quant  
 Model:  
@@ -19,7 +18,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 model = AutoModelForCausalLM.from_pretrained("qwen/qwen3.5-9b", dtype="auto", device_map="auto") # this in bf16 is 18gb
 tokenizer = AutoTokenizer.from_pretrained("qwen/qwen3.5-9b")
 ```
-### Mlx lib:  
+### MLX lib:  
 Install:  
 ```bash
 pip install mlx-lm
@@ -46,7 +45,7 @@ print(prompt)
 
 # for later: text = generate(model, tokenizer, prompt=prompt, verbose=True)
 ```
-I learned to read docs carefully, and that you must look for prompt-template.jinja to find the stuff for the prompt settings  
+I learned to read docs carefully, and that you must look for prompt-template.jinja to find the stuff for the prompt settings.  
   
 ### Token table  
 
