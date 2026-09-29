@@ -61,5 +61,7 @@ print(f"[{time.strftime('%H:%M:%S')}] model_warmed_up")
 
 print(f"[{time.strftime('%H:%M:%S')}] model_running_batch...")
 start = time.perf_counter()
+
 print(prob_batch(batch_statements))
+
 print(f"[{time.strftime('%H:%M:%S')}] model_finished_batch in", time.perf_counter() - start, "seconds")
