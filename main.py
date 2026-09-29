@@ -39,6 +39,8 @@ def prob(statement: str) -> float: #shows the thing accepts a string and returns
 
 def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a list of strings and returns a list of floats
     prompts = []
+    final_prompts = []
+    p_lengths = []
     probabilities_true = []
     for statement in statements:
         prompt = f"Statement: {statement} Question: Is this True or False? Response format: Response should contain only True or False."
@@ -46,14 +48,22 @@ def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a
         messages = [{"role": "user", "content": prompt}]
         prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
 
-        prompts.append(prompt)# puts it into a "prompt folder" which is what the model expects
+        p_lengths.append(len(prompt)) # so we can add padding + calculate which token to fetch
+        prompts.append(prompt) # puts it into a "prompt folder" which is what the model expects
 
-    prompts = mx.array(prompts)
-    logit_table = model(prompts)
+    longest = max(p_lengths)
+    
+    for prompt in prompts:
+        padding = longest - len(prompt)
+        prompt = prompt + [0] * padding
+        final_prompts.append(prompt)
+    
+    final_prompts = mx.array(final_prompts)
+    logit_table = model(final_prompts)
 
     for x in range(len(statements)):
-        truescore = logit_table[x, -1, TRUEID].item()
-        falsescore = logit_table[x, -1, FALSEID].item()
+        truescore = logit_table[x, p_lengths[x] - 1, TRUEID].item()
+        falsescore = logit_table[x, p_lengths[x] - 1, FALSEID].item()
 
         probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
         probabilities_true.append(probability_true.item())
@@ -66,3 +76,7 @@ start = time.perf_counter()
 for statement in batch_statements:
     print(prob(statement))
 print("time to beat: ", time.perf_counter() - start)
+
+start = time.perf_counter()
+print(prob_batch(batch_statements))
+print("batch time: ", time.perf_counter() - start)
