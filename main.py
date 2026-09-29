@@ -19,7 +19,7 @@ print(f"[{time.strftime('%H:%M:%S')}] model_loaded in {time.time() - start} seco
 #except:
 #    print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
 
-def prob(statement: str):
+def prob(statement: str) -> float: #shows the thing accepts a string and returns a float
     prompt = f"Statement: {statement} Question: Is this True or False? Response format: Response should contain only True or False."
 
     messages = [{"role": "user", "content": prompt}]
