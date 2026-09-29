@@ -22,7 +22,7 @@ print(f"[{time.strftime('%H:%M:%S')}] model_loaded in {time.perf_counter() - sta
 
 app = FastAPI()
 
-@app.post("/prob/")
+@app.post("/prot/")
 def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a list of strings and returns a list of floats
     if statements == []:
         return []
