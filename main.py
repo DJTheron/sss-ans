@@ -24,17 +24,19 @@ app = FastAPI()
 
 @app.post("/prot/")
 def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a list of strings and returns a list of floats
-    if statements == []:
+    if statements == []: # exits if empty instead of erroring
         return []
+    
     prompts = []
     final_prompts = []
     p_lengths = []
     probabilities_true = []
+    
     for statement in statements:
         prompt = f"Statement: {statement} Question: Is this True or False? Response format: Response should contain only True or False."
 
         messages = [{"role": "user", "content": prompt}]
-        prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
+        prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False) #thinking is turned off as we just want the scoreboard (logit table) of the first response token the model generates
 
         p_lengths.append(len(prompt)) # so we can add padding + calculate which token to fetch
         prompts.append(prompt) # puts it into a "prompt folder" which is what the model expects
@@ -60,8 +62,9 @@ def prob_batch(statements: list[str]) -> list[float]: #shows the thing accepts a
     return probabilities_true # type: ignore
 
 print(f"[{time.strftime('%H:%M:%S')}] model_warming_up...")
+start = time.perf_counter()
 prob_batch(["Warmup"])
-print(f"[{time.strftime('%H:%M:%S')}] model_warmed_up")
+print(f"[{time.strftime('%H:%M:%S')}] model_warmed_up in {time.perf_counter() - start} seconds")
 
 #batch_statements = ["The sky is green on a clear day.", "The sky is blue on a clear day.", "Pineapple belongs on pizza."]
 
