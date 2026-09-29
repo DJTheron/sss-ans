@@ -76,29 +76,23 @@ import mlx.core as mx
 TRUEID = 2434
 FALSEID = 3913
 
-#try:
-model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-8bit") #type: ignore
+def prob(statement: str) -> float: #shows the thing accepts a string and returns a float
+    prompt = f"Statement: {statement} Question: Is this True or False? Response format: Response should contain only True or False."
 
-#except:
-#    print("Model is probably not downloaded already so edit me (the main.py program) and at the top set HF_HUB_OFFLINE=0")
+    messages = [{"role": "user", "content": prompt}]
+    prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
 
-prompt = "Statement: The sky is green on a clear day. Question: Is this True or False? Response format: Response should contain only True or False."
+    prompt = mx.array(prompt) 
+    prompt = prompt[None] # puts it into a "prompt folder" which is what the model expects
 
-messages = [{"role": "user", "content": prompt}]
+    logit_table = model(prompt)
 
-prompt = tokenizer.apply_chat_template(messages, add_generation_prompt=True, enable_thinking=False)
+    truescore = logit_table[0, -1, TRUEID].item() # 1st thing is which prompt in the "prompt folder" we are fetching the result from 2nd thing is -1 cuz that fetches the last prediction the model made and trueid fetches the score for the score of the token True
+    falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
 
-prompt = mx.array(prompt)
-prompt = prompt[None]
+    probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
 
-logit_table = model(prompt)
-
-truescore = logit_table[0, -1, TRUEID].item()
-falsescore = logit_table[0, -1, FALSEID].item() # i learned u can just do this for arrays instead of have [][][] becuase this is more efficient (maybe faster idk)
-
-probability_true = mx.sigmoid(truescore - falsescore) # if below 50% then false, if above 50% then true
-
-print(probability_true.item())
+    return probability_true.item()
 ```
 
 ## Check out [main.py](main.py) to see the final code
